@@ -17,26 +17,12 @@ public class ProductService {
     private ProductRepo productRepo;
 
     public PProduct performProductLookup(String productCode) {
-        PProduct product = null;
-        try {
-            product = productRepo.findProductBy(productCode);
-        }
-        catch (Exception e) {
-            String msg = String.format(e.getMessage());
-        }
-        return product;
 
+        return productRepo.findProductBy(productCode);
     }
 
     public List<PProduct> performGetAllProducts() {
 
-        List<PProduct> productsList = new ArrayList<>();
-        try {
-            productsList = productRepo.findAll();
-        }
-        catch (Exception e) {
-            String msg = String.format(e.getMessage());
-        }
-        return productsList;
+        return productRepo.findAll();
     }
 }

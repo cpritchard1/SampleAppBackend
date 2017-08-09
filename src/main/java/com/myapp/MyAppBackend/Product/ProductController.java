@@ -1,13 +1,9 @@
 package com.myapp.MyAppBackend.Product;
 
-import com.myapp.MyAppBackend.infrastructure.web.response.CommonWebResponse;
-import com.myapp.MyAppBackend.infrastructure.web.response.FailureWebResponse;
-import com.myapp.MyAppBackend.infrastructure.web.response.SuccessWebResponse;
+import com.myapp.MyAppBackend.infrastructure.web.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Created by cpritcha on 6/6/17.
@@ -21,38 +17,29 @@ public class ProductController {
     private ProductService productService;
 
     @RequestMapping( path = "/{productCode}/findProduct", method = RequestMethod.GET  )
-    @ResponseBody public CommonWebResponse<String> performProductLookup(@PathVariable(required = true, value = "productCode" ) String productCode) {
+    @ResponseBody public CommonWebResponse<PProduct> performProductLookup(@PathVariable(required = true, value = "productCode" ) String productCode) {
 
-        PProduct product = productService.performProductLookup(productCode);
-
-        if ( product != null ) {
-            return new SuccessWebResponse<>("Successfully found product: " + product.getProductName() );
+        try{
+            return new SuccessWebResponse<>(productService.performProductLookup(productCode));
         }
-        else {
-            return new FailureWebResponse<>("Product " + productCode + " does not exist" );
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            ResponseMessage responseMessage = new ErrorResponseMessage(e.getMessage());
+            return new FailureWebResponse<>(null, responseMessage);
         }
     }
 
     @CrossOrigin
     @RequestMapping( path = "/allProducts", method = RequestMethod.GET )
-    @ResponseBody public CommonWebResponse<String> performGetAllProducts() {
+    @ResponseBody public CommonWebResponse<List<PProduct>> performGetAllProducts() {
 
-        List<PProduct> productsList = productService.performGetAllProducts();
-        String jsonList = null;
-
-        if ( productsList != null ) {
-
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                jsonList = mapper.writeValueAsString(productsList);
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
+        try{
+            return new SuccessWebResponse<>(productService.performGetAllProducts());
         }
-        else {
-            return new FailureWebResponse<>("Failed to get all products");
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            ResponseMessage responseMessage = new ErrorResponseMessage(e.getMessage());
+            return new FailureWebResponse<>(null, responseMessage);
         }
-        return new SuccessWebResponse<>(jsonList);
     }
 }

@@ -1,5 +1,7 @@
 package com.myapp.MyAppBackend.User;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -7,9 +9,9 @@ import java.io.Serializable;
  * Created by cpritcha on 6/2/17.
  */
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name ="USER_ACCOUNT", schema="DEV01")
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PUser implements Serializable {
 
     @Id
@@ -38,13 +40,14 @@ public class PUser implements Serializable {
     public String getUserName() {
         return this.userName;
     }
-
     public String getGender() {
         return this.gender;
     }
+    public String getPassword() { return this.password; }
 
-    public String getPassword() {
-        return this.password;
-    }
+    // SETTER FUNCTIONS FOR USER ATTRIBUTERS
+    public void setUserName(String userName) { this.userName = userName; }
+    public void setGender(String gender) { this.gender = gender; }
+    public void setPassword(String password) { this.password = password; }
 
 }

@@ -1,5 +1,7 @@
 package com.myapp.MyAppBackend.Product;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,6 +12,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "PRODUCT", schema = "DEV01")
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PProduct implements Serializable {
 
     @Id
