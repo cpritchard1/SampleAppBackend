@@ -14,51 +14,35 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    public PUser performUserLookup(Integer userId) {
 
-    public PUser performUserLookup(String userName) {
-
-        return  userRepo.findUserBy(userName);
+        return  userRepo.findUserById(userId);
     }
 
 
     public String performCreateUser(String userName, String gender, String password) {
 
-        if(verifyUserExists(userName)) {
-            return "A user with that User Name already exists";
-        }
-        else {
-            PUser user = new PUser(userName, gender, password);
-            userRepo.save(user);
-            return "User successfully created";
-        }
+        PUser user = new PUser(userName, gender, password);
+        userRepo.save(user);
+        return "User successfully created";
     }
 
 
-    public String performUpdateUser(String userName, String gender, String password) {
+    public String performUpdateUser(Integer userId, String userName, String gender, String password) {
 
-        if(verifyUserExists(userName)) {
-            PUser user = userRepo.findUserBy(userName);
-            user.setUserName(userName);
-            user.setGender(gender);
-            user.setPassword(password);
-
-            userRepo.save(user);
-
-            return "User successfully updated";
-        }
-        else{
-            return "User does not exist";
-        }
-
+        PUser user = userRepo.findUserById(userId);
+        user.setUserName(userName);
+        user.setGender(gender);
+        user.setPassword(password);
+        userRepo.save(user);
+        return "User successfully updated";
     }
 
 
-    public String performDeleteUser(String userName) {
+    public String performDeleteUser(Integer userId) {
 
-        if(verifyUserExists(userName)) {
-            PUser user = userRepo.findUserBy(userName);
-            userRepo.delete(user);
-        }
+        PUser user = userRepo.findUserById(userId);
+        userRepo.delete(user);
         return "User successfully deleted";
     }
 
@@ -68,13 +52,12 @@ public class UserService {
         return userRepo.findAll();
     }
 
+    public boolean validateUserName(String userName) {
 
-    boolean verifyUserExists(String username){
-
-        if(userRepo.findUserBy(username) != null){
+        if(userRepo.findUserByName(userName) != null) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }

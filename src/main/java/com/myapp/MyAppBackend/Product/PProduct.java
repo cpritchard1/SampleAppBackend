@@ -16,13 +16,17 @@ import java.io.Serializable;
 public class PProduct implements Serializable {
 
     @Id
-    @Column(name = "CODE")
-    private String productPk;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "PRODUCT_ID", unique = true)
+    private Integer productId;
 
-    @Column(name = "NAME")
+    @Column(name = "PRODUCT_CODE", unique = true)
+    private String productCode;
+
+    @Column(name = "PRODUCT_NAME")
     private String productName;
 
-    @Column(name = "PRICE")
+    @Column(name = "PRODUCT_PRICE")
     private float productPrice;
 
     public PProduct() {
@@ -32,21 +36,25 @@ public class PProduct implements Serializable {
     // CONSTRUCTOR FOR CREATING NEW PRODUCT
     public PProduct( String code, String name, float price) {
 
-        this.productPk = code;
+        this.productCode = code;
         this.productName = name;
         this.productPrice = price;
     }
 
     // GETTER FUNCTIONS FOR PRODUCT ATTRIBUTES
-    public String getProductPk() {
-        return productPk;
+    public Integer getProductId() { return productId; }
+    public String getProductCode() {
+        return productCode;
     }
-
     public String getProductName() {
         return productName;
     }
-
     public float getProductPrice() {
         return productPrice;
     }
+
+    // SETTER FUNCTIONS FOR PRODUCT ATTRIBUTES
+    public void setProductCode(String productCode) { this.productCode = productCode; }
+    public void setProductName(String productName) { this.productName = productName; }
+    public void setProductPrice(float productPrice) { this.productPrice = productPrice; }
 }

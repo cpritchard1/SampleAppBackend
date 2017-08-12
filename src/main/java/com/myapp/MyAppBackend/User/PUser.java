@@ -15,7 +15,12 @@ import java.io.Serializable;
 public class PUser implements Serializable {
 
     @Id
-    @Column(name = "USER_NAME")
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "USER_ID")
+    private Integer userId;
+
+
+    @Column(name = "USER_NAME", unique = true)
     private String userName;
 
     @Column(name = "GENDER")
@@ -37,6 +42,7 @@ public class PUser implements Serializable {
     }
 
     // GETTER FUNCTIONS FOR USER ATTRIBUTES
+    public Integer getUserId() { return this.userId; }
     public String getUserName() {
         return this.userName;
     }

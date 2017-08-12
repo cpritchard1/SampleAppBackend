@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepo extends JpaRepository<PProduct, String> {
 
-    @Query( value = "SELECT p FROM PProduct p WHERE p.productPk = :productCode" )
-    PProduct findProductBy(@Param("productCode") String productCode);
+    @Query( value = "SELECT p FROM PProduct p WHERE p.productCode = :productCode" )
+    PProduct findProductByCode(@Param("productCode") String productCode);
+
+    @Query( value = "SELECT p FROM PProduct p WHERE p.productId = :productId")
+    PProduct findProductById(@Param("productId") Integer productId);
 }

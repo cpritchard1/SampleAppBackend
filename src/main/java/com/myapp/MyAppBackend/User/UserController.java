@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 /**
  * Created by cpritcha on 6/2/17.
  */
@@ -18,11 +16,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping( path = "/{userName}/findUser", method = RequestMethod.GET  )
-    @ResponseBody public CommonWebResponse<PUser> performUserLookup(@PathVariable(required = true, value = "userName" ) String userName) {
+    @RequestMapping( path = "/{userId}/findUser", method = RequestMethod.GET  )
+    @ResponseBody public CommonWebResponse<PUser> performUserLookup(@PathVariable(required = true, value = "userId" ) Integer userId) {
 
         try{
-            return new SuccessWebResponse<>(userService.performUserLookup(userName));
+            return new SuccessWebResponse<>(userService.performUserLookup(userId));
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -47,14 +45,15 @@ public class UserController {
         }
     }
 
-    @RequestMapping ( path = "/{userName}/{gender}/{password}/updateUser", method = RequestMethod.GET )
+    @RequestMapping ( path = "/{userId}/{userName}/{gender}/{password}/updateUser", method = RequestMethod.GET )
     @ResponseBody public CommonWebResponse<String> performUpdateUser(
+            @PathVariable(required = true, value = "userId") Integer userId,
             @PathVariable(required = true, value = "userName") String userName,
             @PathVariable(required = true, value = "gender") String gender,
             @PathVariable(required = true, value = "password") String password) {
 
         try{
-            return new SuccessWebResponse<>(userService.performUpdateUser(userName, gender, password));
+            return new SuccessWebResponse<>(userService.performUpdateUser( userId, userName, gender, password));
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -63,11 +62,11 @@ public class UserController {
         }
     }
 
-    @RequestMapping( path = "/{userName}/deleteUser", method = RequestMethod.GET  )
-    @ResponseBody public CommonWebResponse<String> performDeleteUser(@PathVariable(required = true, value = "userName" ) String userName) {
+    @RequestMapping( path = "/{userId}/deleteUser", method = RequestMethod.GET  )
+    @ResponseBody public CommonWebResponse<String> performDeleteUser(@PathVariable(required = true, value = "userId" ) Integer userId) {
 
         try{
-            return new SuccessWebResponse<>(userService.performDeleteUser(userName));
+            return new SuccessWebResponse<>(userService.performDeleteUser(userId));
         }
         catch(Exception e){
             System.out.println(e.getMessage());
