@@ -43,6 +43,7 @@ public class UserService {
 
         PUser user = userRepo.findUserById(userId);
         userRepo.delete(user);
+//        userRepo.deleteUserById(userId);
         return "User successfully deleted";
     }
 

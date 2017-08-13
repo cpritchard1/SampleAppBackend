@@ -52,8 +52,30 @@ public class PUser implements Serializable {
     public String getPassword() { return this.password; }
 
     // SETTER FUNCTIONS FOR USER ATTRIBUTERS
+    public void setUserId(Integer userId) { this.userId = userId; }
     public void setUserName(String userName) { this.userName = userName; }
     public void setGender(String gender) { this.gender = gender; }
     public void setPassword(String password) { this.password = password; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PUser pUser = (PUser) o;
+
+        if (!userId.equals(pUser.userId)) return false;
+        if (!userName.equals(pUser.userName)) return false;
+        if (!gender.equals(pUser.gender)) return false;
+        return password.equals(pUser.password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId.hashCode();
+        result = 31 * result + userName.hashCode();
+        result = 31 * result + gender.hashCode();
+        result = 31 * result + password.hashCode();
+        return result;
+    }
 }
