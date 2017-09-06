@@ -1,6 +1,7 @@
 package com.myapp.MyAppBackend.infrastructure.web.response;
 
 import static com.myapp.MyAppBackend.infrastructure.web.response.ResponseMessageType.ERROR;
+
 /**
  * ErrorResponseMessage is a subclass of ResponseMessage that always sets the ResponseMessageType to
  * {@link ResponseMessageType#ERROR}.

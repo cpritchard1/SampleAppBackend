@@ -3,6 +3,7 @@ package com.myapp.MyAppBackend.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.springframework.data.domain.Example;
 
 /**
  * Created by cpritcha on 6/2/17.
@@ -14,52 +15,47 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-    public PUser performUserLookup(Integer userId) {
 
-        return  userRepo.findUserById(userId);
+/* ***********************************************************************************
+        Search for all Users matching the created example
+ *************************************************************************************/
+    public List<PUser> performUserLookup(Integer userId, String userName, String gender) {
+
+        Example<PUser> example = Example.of(new PUser(userName, gender, null));
+
+        List<PUser> users = userRepo.findAll(example);
+
+        return users;
     }
 
 
-    public String performCreateUser(String userName, String gender, String password) {
+/* ***********************************************************************************
+        Create Update or Delete a User object and return true on success
+ *************************************************************************************/
+    public User performUpdateUser(User user) {
 
-        PUser user = new PUser(userName, gender, password);
-        userRepo.save(user);
-        return "User successfully created";
-    }
+        PUser entity;
 
-
-    public String performUpdateUser(Integer userId, String userName, String gender, String password) {
-
-        PUser user = userRepo.findUserById(userId);
-        user.setUserName(userName);
-        user.setGender(gender);
-        user.setPassword(password);
-        userRepo.save(user);
-        return "User successfully updated";
-    }
-
-
-    public String performDeleteUser(Integer userId) {
-
-        PUser user = userRepo.findUserById(userId);
-        userRepo.delete(user);
-//        userRepo.deleteUserById(userId);
-        return "User successfully deleted";
-    }
-
-
-    public List<PUser> performGetAllUsers() {
-
-        return userRepo.findAll();
-    }
-
-    public boolean validateUserName(String userName) {
-
-        if(userRepo.findUserByName(userName) != null) {
-            return true;
+        if(user.getSetForDelete()) {
+            userRepo.delete(userRepo.findUserById(user.getUserId()));
+            return null;
+        }
+        else if(user.isNew()) {
+            entity = new UserToPUserConverter(user).toEntityObject();
+            userRepo.save(entity);
         }
         else {
-            return false;
+            entity = userRepo.findUserById(user.getUserId()).updateEntity(user);
+            userRepo.save(entity);
         }
+
+        return new PUserToUserConverter(entity).toDomainObject();
+    }
+
+/* ***********************************************************************************
+       Used for setting repository during unit testing
+ *************************************************************************************/
+    public void setUserRepo(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 }

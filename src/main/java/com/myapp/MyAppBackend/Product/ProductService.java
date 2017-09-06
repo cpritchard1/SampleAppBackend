@@ -2,9 +2,8 @@ package com.myapp.MyAppBackend.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Example;
 
 /**
  * Created by cpritcha on 6/6/17.
@@ -16,41 +15,45 @@ public class ProductService {
     @Autowired
     private ProductRepo productRepo;
 
-    public PProduct performProductLookup(String productCode) {
+/* ***********************************************************************************
+        Search for all Products matching the created example
+ *************************************************************************************/
+    public List<PProduct> performProductLookup(String productCode, String productName, Double productPrice) {
 
-        return productRepo.findProductByCode(productCode);
+        Example<PProduct> example = Example.of(new PProduct(productCode, productName, productPrice));
+
+        List<PProduct> products = productRepo.findAll(example);
+
+        return products;
     }
 
 
-    public String performCreateProduct(String productCode, String productName, float productPrice) {
+/* ***********************************************************************************
+        Create Update or Delete a Product object and return true on success
+ *************************************************************************************/
+    public Boolean performUpdateProduct(List<Product> product) {
 
-        PProduct product = new PProduct(productCode, productName, productPrice);
-        productRepo.save(product);
-        return "Product successfully created";
+        product.forEach((row) -> {
+            if(row.getSetForDelete()) {
+                productRepo.delete(productRepo.findProductById(row.getProductId()));
+            }
+            else if(row.isNew()) {
+                PProduct entity = new ProductToPProductConverter(row).toEntityObject();
+                productRepo.save(entity);
+            }
+            else {
+                PProduct entity = productRepo.findProductById(row.getProductId()).updateEntity(row);
+                productRepo.save(entity);
+            }
+        });
+
+        return true;
     }
 
-
-    public String performUpdateProduct(Integer productId, String productCode, String productName, float productPrice) {
-
-        PProduct product = productRepo.findProductById(productId);
-        product.setProductCode(productCode);
-        product.setProductName(productName);
-        product.setProductPrice(productPrice);
-        productRepo.save(product);
-        return "Product successfully updated";
-    }
-
-
-    public String performDeleteProduct(Integer productId) {
-
-        PProduct product = productRepo.findProductById(productId);
-        productRepo.delete(product);
-        return "Product successfully deleted";
-    }
-
-
-    public List<PProduct> performGetAllProducts() {
-
-        return productRepo.findAll();
+/* ***********************************************************************************
+       Used for setting repository during unit testing
+ *************************************************************************************/
+    public void setProductRepo(ProductRepo productRepo) {
+        this.productRepo = productRepo;
     }
 }

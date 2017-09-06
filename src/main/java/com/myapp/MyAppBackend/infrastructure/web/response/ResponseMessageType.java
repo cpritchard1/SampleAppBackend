@@ -12,4 +12,3 @@ enum ResponseMessageType {
     WARN,
     ERROR
 }
-

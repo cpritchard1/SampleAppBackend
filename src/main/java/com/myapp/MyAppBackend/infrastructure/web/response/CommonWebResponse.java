@@ -1,7 +1,7 @@
 package com.myapp.MyAppBackend.infrastructure.web.response;
 
+import com.myapp.MyAppBackend.common.Views;
 import com.fasterxml.jackson.annotation.JsonView;
-
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -22,13 +22,13 @@ public abstract class CommonWebResponse<T> {
 
     // Fields are public so they will be automatically picked up by Jackson
     // and serialized to JSON.
-    //@JsonView(Views.Any.class)
+    @JsonView(Views.Any.class)
     public final Boolean success;
 
-    //@JsonView(Views.Any.class)
+    @JsonView(Views.Any.class)
     public final List<ResponseMessage> msg;
 
-    //@JsonView(Views.Any.class)
+    @JsonView(Views.Any.class)
     public T data;
 
     /**

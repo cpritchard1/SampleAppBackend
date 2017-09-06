@@ -19,7 +19,6 @@ public class PUser implements Serializable {
     @Column(name = "USER_ID")
     private Integer userId;
 
-
     @Column(name = "USER_NAME", unique = true)
     private String userName;
 
@@ -57,6 +56,13 @@ public class PUser implements Serializable {
     public void setGender(String gender) { this.gender = gender; }
     public void setPassword(String password) { this.password = password; }
 
+    public PUser updateEntity(User domainObj) {
+        this.setUserName(domainObj.getUserName());
+        this.setGender(domainObj.getGender());
+        this.setPassword(domainObj.getPassword());
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,5 +83,15 @@ public class PUser implements Serializable {
         result = 31 * result + gender.hashCode();
         result = 31 * result + password.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "PUser{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

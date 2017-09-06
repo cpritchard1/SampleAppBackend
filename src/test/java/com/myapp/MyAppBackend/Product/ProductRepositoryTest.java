@@ -1,15 +1,16 @@
-package com.myapp.MyAppBackend.User;
+package com.myapp.MyAppBackend.Product;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -22,26 +23,28 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DataJpaTest
 @Sql({"/db/all-schema.sql", "/db/all-data.sql"})
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-public class UserRepositoryTest {
+public class ProductRepositoryTest {
 
     @Autowired
-    private UserRepo userRepo;
+    private ProductRepo productRepo;
 
     @Test
     public void getUserById_ShouldReturnUserObject() {
-        PUser user = userRepo.findUserById(1);
+        PProduct actualProduct = productRepo.findProductById(1);
+        PProduct expectedProduct = new PProduct("P001", "Product 1", 1.99);
+        expectedProduct.setProductId(1);
 
-        Assert.assertNotNull(user);
-        assertThat(user.getUserName(), is("Cody"));
+        assertThat(actualProduct, is(equalTo(expectedProduct)));
     }
 
     @Test
     public void getUserByName_ShouldReturnUserObject() {
-        PUser user = userRepo.findUserByName("Cody");
+        PProduct actualProduct = productRepo.findProductByCode("P005");
+        PProduct expectedProduct = new PProduct("P005", "Product 5", 5.99);
+        expectedProduct.setProductId(5);
 
-        Assert.assertNotNull(user);
-        assertThat(user.getUserName(), is("Cody"));
-        assertThat(user.getUserId(), is(1));
+        assertThat(actualProduct, is(equalTo(expectedProduct)));
     }
 
 }
+

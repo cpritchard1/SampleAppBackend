@@ -17,7 +17,4 @@ public interface UserRepo extends JpaRepository<PUser, String> {
 
     @Query( value = "SELECT u FROM PUser u WHERE u.userId = :userId")
     PUser findUserById(@Param("userId") Integer userId);
-
-//    @Query( value = "DELETE FROM PUser u WHERE u.userId = :userId")
-//    PUser deleteUserById(@Param("userId") Integer userId);
 }
